@@ -567,7 +567,7 @@ function sendFakeAI() {
             setMusicPlaying={setMusicPlaying}
           />
 
-          <section className="min-h-[72vh] overflow-hidden rounded-[2.2rem] border border-white/10 bg-white/[0.04] p-6 shadow-2xl backdrop-blur-2xl md:p-10">
+          <section className="min-h-[72vh] overflow-hidden rounded-[1.5rem] border border-white/10 bg-white/[0.04] p-4 shadow-2xl backdrop-blur-2xl md:rounded-[2.2rem] md:p-10">
             <AnimatePresence mode="wait">
               {screen === "inicio" && (
                 <Screen key="inicio" accent={accent}>
@@ -579,9 +579,11 @@ function sendFakeAI() {
                         {t.heroTitle}
                       </h1>
 
-                      <h2 className={`${sora.className} mt-5 max-w-[390px] break-words text-[1.85rem] font-semibold leading-[1.08] tracking-[-0.04em] text-zinc-200 md:text-[2.55rem]`}>
-                        {t.heroSubtitle}
-                      </h2>
+                      <h2
+  className={`${sora.className} mt-7 max-w-[1050px] text-[2rem] font-bold leading-[1.05] tracking-[-0.05em] text-white md:mt-10 md:text-[4rem]`}
+>
+  {title}
+</h2>
 
                       <p className="mt-6 max-w-[420px] break-words text-[14.5px] leading-7 text-zinc-400">
                         {t.heroText}
@@ -1130,7 +1132,7 @@ function Header({ menu, screen, setScreen, language, setLanguage, online }) {
   <img
     src="/images/logo.png"
     alt="Diego.dev"
-    className="h-9 w-9 rounded-xl object-cover shadow-[0_0_20px_rgba(59,130,246,0.4)]"
+    className="h-8 w-8 rounded-xl object-cover shadow-[0_0_20px_rgba(59,130,246,0.4)] md:h-9 md:w-9"
   />
 
   <div>
