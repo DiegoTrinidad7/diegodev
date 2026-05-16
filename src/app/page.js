@@ -26,8 +26,7 @@ export default function Home() {
   const [activeQuestion, setActiveQuestion] = useState(0);
   const [visitorMessage, setVisitorMessage] = useState("");
   const [visitorName, setVisitorName] = useState("");
-  const [score, setScore] = useState(0);
-const [bestScore, setBestScore] = useState(0);
+
 
 useEffect(() => {
   const saved = localStorage.getItem("diegoBestScore");
@@ -61,21 +60,7 @@ function playTapSound() {
     console.log("Audio no disponible");
   }
 }
-function addPoint() {
-  playTapSound();
-  const next = score + 1;
 
-  setScore(next);
-
-  if (next > bestScore) {
-    setBestScore(next);
-
-    localStorage.setItem(
-      "diegoBestScore",
-      String(next)
-    );
-  }
-}
 const [savedMessages, setSavedMessages] = useState([]);
 
 useEffect(() => {
@@ -719,56 +704,15 @@ function sendFakeAI() {
                         <GhostButton onClick={() => setScreen("terminal")}>
                           Terminal
                         </GhostButton>
+
+              
                       </div>
 
                       <QuickStats accent={accent} />
-                      <div className="mt-8 xl:hidden">
-  <div className="grid gap-4">  {[
-      {
-        title: "Sistema IA",
-        desc: "Interactive intelligence core",
-      },
-      {
-        title: "Visual Engine",
-        desc: "Dynamic experience modules",
-      },
-      {
-        title: "Digital Lab",
-        desc: "Experimental interactions",
-      },
-      {
-        title: "Memory System",
-        desc: "Live immersive interface",
-      },
-    ].map((item) => (
-      <motion.div
-        whileTap={{
-          scale: 0.97,
-        }}
-        key={item.title}
-       className="w-full rounded-[2rem] border border-white/10 bg-black/40 p-6 backdrop-blur-2xl"
-      >
-        <div
-          className={`h-14 w-14 rounded-2xl ${accent.bg} shadow-[0_0_30px_rgba(59,130,246,0.35)]`}
-        />
-
-        <h3
-          className={`${sora.className} mt-6 text-2xl font-bold text-white`}
-        >
-          {item.title}
-        </h3>
-
-        <p className="mt-3 text-sm leading-7 text-zinc-400">
-          {item.desc}
-        </p>
-      </motion.div>
-    ))}
-  </div>
+                      <div className="mt-10">
+  <AnonymousMessage accent={accent} />
 </div>
-<div className="mt-12 space-y-12">
-  <LiveCore accent={accent} playTapSound={playTapSound} />
-  <EmojiBalanceGame accent={accent} playTapSound={playTapSound} />
-</div>
+                      
                       <div className="mt-8">
  <InteractiveZone
   accent={accent}
@@ -2097,64 +2041,7 @@ function ScanOverlay({ screen }) {
   );
 }
 
-function LiveCore({ accent, playTapSound }) {
-  return (
-    <Panel>
-      <div className="flex flex-col items-center text-center">
-        <p className={`text-xs uppercase tracking-[0.2em] ${accent.text}`}>
-          Live Core
-        </p>
 
-        <button
-          onClick={playTapSound}
-          className="relative mt-8 flex h-48 w-48 items-center justify-center rounded-full"
-        >
-          <motion.div
-            animate={{
-              scale: [1, 1.08, 1],
-              opacity: [0.6, 1, 0.6],
-            }}
-            transition={{
-              duration: 2,
-              repeat: Infinity,
-            }}
-            className={`absolute inset-0 rounded-full ${accent.bg} blur-3xl opacity-40`}
-          />
-
-          <motion.div
-            animate={{ rotate: 360 }}
-            transition={{
-              duration: 12,
-              repeat: Infinity,
-              ease: "linear",
-            }}
-            className="absolute inset-3 rounded-full border border-white/10 border-t-white/60"
-          />
-
-          <motion.div
-            animate={{ rotate: -360 }}
-            transition={{
-              duration: 18,
-              repeat: Infinity,
-              ease: "linear",
-            }}
-            className="absolute inset-8 rounded-full border border-blue-300/20 border-b-blue-300/70"
-          />
-
-          <div className="relative z-10 h-24 w-24 rounded-full border border-white/20 bg-black/50 shadow-[0_0_40px_rgba(59,130,246,0.45)]" />
-        </button>
-
-        <h3 className={`${sora.className} mt-8 text-2xl font-bold text-white`}>
-          Núcleo interactivo
-        </h3>
-
-        <p className="mt-3 max-w-sm text-sm leading-7 text-zinc-400">
-          Toca el núcleo para activar respuesta háptica y energía visual.
-        </p>
-      </div>
-    </Panel>
-  );
-}
 function TapGame({
   accent,
   score,
@@ -2233,174 +2120,7 @@ function TapGame({
     </Panel>
   );
 }
-function EmojiBalanceGame({ accent, playTapSound }) {
-  const emojis = ["😵", "⚽", "🔥", "⭐", "🎮", "💎"];
-  const [emoji, setEmoji] = useState("😵");
-  const [ball, setBall] = useState({ x: 140, y: 70, vx: 3, vy: 4 });
-  const [paddleX, setPaddleX] = useState(95);
-  const [running, setRunning] = useState(false);
-  const [gameOver, setGameOver] = useState(false);
-  const [points, setPoints] = useState(0);
-  const [record, setRecord] = useState(0);
 
-  useEffect(() => {
-    const saved = localStorage.getItem("diegoBounceRecord");
-    if (saved) setRecord(Number(saved));
-  }, []);
-
-  useEffect(() => {
-    if (!running) return;
-
-    const loop = setInterval(() => {
-      setBall((b) => {
-        let nextX = b.x + b.vx;
-        let nextY = b.y + b.vy;
-        let nextVx = b.vx;
-        let nextVy = b.vy;
-
-        if (nextX <= 8 || nextX >= 270) nextVx *= -1;
-        if (nextY <= 8) nextVy *= -1;
-
-        const hitsPaddle =
-          nextY >= 305 &&
-          nextY <= 330 &&
-          nextX >= paddleX &&
-          nextX <= paddleX + 110;
-
-        if (hitsPaddle) {
-          playTapSound();
-          const nextPoints = points + 1;
-          setPoints(nextPoints);
-
-          if (nextPoints > record) {
-            setRecord(nextPoints);
-            localStorage.setItem("diegoBounceRecord", String(nextPoints));
-          }
-
-          nextVy = -(4 + Math.min(nextPoints * 0.25, 6));
-          nextVx = nextVx + (Math.random() - 0.5) * 1.2;
-        }
-
-        if (nextY > 360) {
-          setRunning(false);
-          setGameOver(true);
-          return b;
-        }
-
-        return { x: nextX, y: nextY, vx: nextVx, vy: nextVy };
-      });
-    }, 22);
-
-    return () => clearInterval(loop);
-  }, [running, paddleX, points, record, playTapSound]);
-
-  function startGame() {
-    playTapSound();
-    setBall({ x: 140, y: 70, vx: 3, vy: 4 });
-    setPaddleX(95);
-    setPoints(0);
-    setGameOver(false);
-    setRunning(true);
-  }
-
-  function movePaddle(e) {
-    const rect = e.currentTarget.getBoundingClientRect();
-    const clientX = e.touches ? e.touches[0].clientX : e.clientX;
-    const x = clientX - rect.left - 55;
-    setPaddleX(Math.max(10, Math.min(x, rect.width - 120)));
-  }
-
-  return (
-    <Panel>
-      <div className="flex items-center justify-between gap-4">
-        <div>
-          <p className={`text-xs uppercase tracking-[0.2em] ${accent.text}`}>
-            Mini juego
-          </p>
-
-          <h3 className={`${sora.className} mt-3 text-2xl font-bold text-white`}>
-            Rebote extremo
-          </h3>
-        </div>
-
-        <div className="text-right">
-          <p className="text-xs text-zinc-500">Score</p>
-          <p className={`${sora.className} text-3xl font-bold ${accent.text}`}>
-            {points}
-          </p>
-        </div>
-      </div>
-
-      <div className="mt-5 flex flex-wrap gap-2">
-        {emojis.map((item) => (
-          <button
-            key={item}
-            onClick={() => setEmoji(item)}
-            className={`rounded-2xl border px-4 py-3 text-2xl ${
-              emoji === item
-                ? `${accent.bg} border-white/20`
-                : "border-white/10 bg-white/[0.04]"
-            }`}
-          >
-            {item}
-          </button>
-        ))}
-      </div>
-
-      <div
-        onMouseMove={movePaddle}
-        onTouchMove={movePaddle}
-        onClick={!running ? startGame : undefined}
-        className="relative mt-6 h-[380px] w-full overflow-hidden rounded-[2rem] border border-white/10 bg-[#fff8b8]/95 touch-none"
-      >
-        <div
-          className="absolute text-5xl"
-          style={{
-            left: `${ball.x}px`,
-            top: `${ball.y}px`,
-          }}
-        >
-          {emoji}
-        </div>
-
-        <div className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 text-[8rem] font-black text-black/20">
-          {points}
-        </div>
-
-        <div
-          className="absolute bottom-8 h-11 rounded-full bg-black shadow-2xl"
-          style={{
-            left: `${paddleX}px`,
-            width: "110px",
-          }}
-        />
-
-        {!running && (
-          <div className="absolute inset-0 flex items-center justify-center bg-black/20 text-center backdrop-blur-[2px]">
-            <p className="rounded-2xl bg-black/70 px-6 py-4 text-sm font-bold text-white">
-              Toca para iniciar y mueve la barra con tu dedo
-            </p>
-          </div>
-        )}
-
-        {gameOver && (
-          <div className="absolute inset-0 flex items-center justify-center bg-black/35 text-center backdrop-blur-sm">
-            <p className={`${sora.className} rounded-2xl bg-black/80 px-6 py-4 text-2xl font-bold text-white`}>
-              Game Over
-            </p>
-          </div>
-        )}
-      </div>
-
-      <div className="mt-5 flex items-center justify-between rounded-2xl border border-white/10 bg-white/[0.04] px-5 py-4">
-        <span className="text-sm text-zinc-400">Mejor récord</span>
-        <span className={`${sora.className} font-bold ${accent.text}`}>
-          {record}
-        </span>
-      </div>
-    </Panel>
-  );
-}
 function InteractiveZone({
   accent,
   visitorMessage,
@@ -2470,5 +2190,57 @@ function ContactCard({ item }) {
         Abrir →
       </p>
     </a>
+  );
+}
+function AnonymousMessage({ accent }) {
+  const [message, setMessage] = useState("");
+  const [saved, setSaved] = useState(false);
+
+  function handleSave() {
+    if (!message.trim()) return;
+
+    setSaved(true);
+
+    setTimeout(() => {
+      setSaved(false);
+    }, 2500);
+  }
+
+  return (
+    <div className="rounded-[2rem] border border-white/10 bg-black/30 p-6 backdrop-blur-xl">
+      <p className="text-[11px] uppercase tracking-[0.25em] text-zinc-500">
+        MENSAJE ANÓNIMO
+      </p>
+
+      <h2
+        className={`${sora.className} mt-3 text-[2rem] font-bold text-white`}
+      >
+        Deja algo en el sistema
+      </h2>
+
+      <p className="mt-3 max-w-[520px] text-zinc-400">
+        Escribe un pensamiento, frase o mensaje anónimo dentro del núcleo digital.
+      </p>
+
+      <textarea
+        value={message}
+        onChange={(e) => setMessage(e.target.value)}
+        placeholder="Escribe algo..."
+        className="mt-6 h-[140px] w-full resize-none rounded-[1.5rem] border border-white/10 bg-black/40 p-5 text-white outline-none transition focus:border-white/20"
+      />
+
+      <button
+        onClick={handleSave}
+        className={`mt-5 rounded-[1.2rem] px-6 py-3 text-white transition ${accent.button}`}
+      >
+        Guardar mensaje
+      </button>
+
+      {saved && (
+        <p className="mt-4 text-sm text-emerald-400">
+          Mensaje guardado dentro del núcleo.
+        </p>
+      )}
+    </div>
   );
 }
