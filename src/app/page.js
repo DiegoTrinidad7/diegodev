@@ -331,13 +331,31 @@ const [nowPlaying] = useState({
 
 
   
+const timeline = [
+  {
+    year: "2025",
+    title: "Primer contacto con programación",
+    text: "Inicio en lógica, desarrollo de software y creación de proyectos interactivos dentro del entorno tecnológico.",
+  },
 
-  const timeline = [
-    { year: "2025", title: "Inicio con programación", text: "Primeros pasos con lógica, Java y conceptos de programación orientada a objetos." },
-    { year: "2026", title: "Construcción de proyectos", text: "Desarrollo de interfaces, ejercicios de software, prototipos, web apps y experiencias interactivas." },
-    { year: "Ahora", title: "Diego.dev", text: "Un espacio personal para mostrar evolución, proyectos, fotos, ideas y tecnologías." },
-    { year: "Próximo", title: "IA + datos reales", text: "Conectar asistente IA, contador de visitas, clima, dashboard y contenido editable." },
-  ];
+  {
+    year: "2026",
+    title: "Exploración digital",
+    text: "Construcción de interfaces visuales, experiencias web, sistemas interactivos y conceptos conectados con IA.",
+  },
+
+  {
+    year: "Ahora",
+    title: "Diego.dev",
+    text: "Creación de un espacio personal enfocado en identidad digital, diseño futurista y experiencias tecnológicas modernas.",
+  },
+
+  {
+    year: "Próximo",
+    title: "Ecosistema inteligente",
+    text: "Desarrollo de plataformas conectadas con inteligencia artificial, automatización, visualización de datos y herramientas digitales avanzadas.",
+  },
+];
 
 
   const manifesto = [
@@ -1517,22 +1535,31 @@ function FloatingIdeas({ accent }) {
 
 const projects = [
   {
-    tag: "Principal",
-    title: "Diego.dev",
-    text: "Mi app web personal con identidad, proyectos, contacto, IA, terminal y mensaje anónimo.",
+    tag: "En desarrollo",
+    title: "NeuroMarket",
+    text: "Marketplace inteligente que conecta productos, tendencias y comportamiento digital en tiempo real mediante IA predictiva.",
     status: "Activo",
   },
+
   {
-    tag: "Interactivo",
-    title: "Mensaje anónimo",
-    text: "Un módulo para dejar mensajes dentro del sistema digital de forma simple y elegante.",
-    status: "Nuevo",
+    tag: "Próximo",
+    title: "Aether OS",
+    text: "Sistema visual futurista para organizar ideas, proyectos, tareas y recuerdos dentro de un entorno interactivo minimalista.",
+    status: "Concepto",
   },
+
   {
-    tag: "Próxima fase",
-    title: "Asistente IA",
-    text: "Un asistente que responderá preguntas sobre mí, mis proyectos y tecnologías.",
-    status: "Planeado",
+    tag: "Planeado",
+    title: "Ghost Protocol",
+    text: "Red social privada enfocada en identidades digitales anónimas, comunicación cifrada y experiencias inmersivas.",
+    status: "Investigación",
+  },
+
+  {
+    tag: "Experimental",
+    title: "Vision AI",
+    text: "Motor de inteligencia artificial capaz de analizar imágenes, detectar patrones y generar interfaces dinámicas automáticamente.",
+    status: "Labs",
   },
 ];
 const currentlyBuilding = [
