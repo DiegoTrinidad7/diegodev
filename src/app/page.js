@@ -720,64 +720,7 @@ function sendFakeAI() {
                           Terminal
                         </GhostButton>
                       </div>
-<div className="mt-8 grid grid-cols-1 sm:grid-cols-2 gap-3 xl:hidden">
-  {[
-    {
-      title: "IA",
-      icon: "◉",
-      screen: "ia",
-    },
-    {
-      title: "Juego",
-      icon: "✦",
-      screen: "inicio",
-    },
-    {
-      title: "Core",
-      icon: "◎",
-      screen: "inicio",
-    },
-    {
-      title: "Contacto",
-      icon: "@",
-      screen: "contacto",
-    },
-  ].map((item) => (
-    <button
-      key={item.title}
-      onClick={() => {
-        setScreen(item.screen);
 
-        if (navigator.vibrate) {
-          navigator.vibrate(18);
-        }
-      }}
-      className={`group relative overflow-hidden rounded-[2rem] border border-white/10 bg-black/40 p-5 text-left backdrop-blur-xl transition active:scale-[0.97]`}
-    >
-      <div
-        className={`absolute inset-0 opacity-0 transition group-active:opacity-100 ${accent.bg}`}
-      />
-
-      <div className="relative z-10">
-        <div
-          className={`flex h-12 w-12 items-center justify-center rounded-2xl ${accent.bg} text-xl text-white shadow-[0_0_25px_rgba(59,130,246,0.35)]`}
-        >
-          {item.icon}
-        </div>
-
-        <p
-          className={`${sora.className} mt-5 text-lg font-bold text-white`}
-        >
-          {item.title}
-        </p>
-
-        <p className="mt-1 text-xs text-zinc-500">
-          Interactive module
-        </p>
-      </div>
-    </button>
-  ))}
-</div>
                       <QuickStats accent={accent} />
                       <div className="mt-8 xl:hidden">
   <div className="grid gap-4">  {[
@@ -2291,53 +2234,80 @@ function TapGame({
   );
 }
 function EmojiBalanceGame({ accent, playTapSound }) {
-  const emojis = ["⚽", "🚀", "⭐", "🎮", "🔥", "💎"];
-  const [emoji, setEmoji] = useState("⚽");
-  const [y, setY] = useState(130);
-  const [velocity, setVelocity] = useState(0);
+  const emojis = ["😵", "⚽", "🔥", "⭐", "🎮", "💎"];
+  const [emoji, setEmoji] = useState("😵");
+  const [ball, setBall] = useState({ x: 140, y: 70, vx: 3, vy: 4 });
+  const [paddleX, setPaddleX] = useState(95);
   const [running, setRunning] = useState(false);
   const [gameOver, setGameOver] = useState(false);
   const [points, setPoints] = useState(0);
   const [record, setRecord] = useState(0);
 
   useEffect(() => {
+    const saved = localStorage.getItem("diegoBounceRecord");
+    if (saved) setRecord(Number(saved));
+  }, []);
+
+  useEffect(() => {
     if (!running) return;
 
     const loop = setInterval(() => {
-      setVelocity((v) => v + 0.55 + Math.min(points / 900, 0.8));
+      setBall((b) => {
+        let nextX = b.x + b.vx;
+        let nextY = b.y + b.vy;
+        let nextVx = b.vx;
+        let nextVy = b.vy;
 
-      setY((currentY) => {
-        const nextY = currentY + velocity;
+        if (nextX <= 8 || nextX >= 270) nextVx *= -1;
+        if (nextY <= 8) nextVy *= -1;
 
-        if (nextY < 0 || nextY > 250) {
-          setRunning(false);
-          setGameOver(true);
-          setRecord((old) => Math.max(old, points));
-          return currentY;
+        const hitsPaddle =
+          nextY >= 305 &&
+          nextY <= 330 &&
+          nextX >= paddleX &&
+          nextX <= paddleX + 110;
+
+        if (hitsPaddle) {
+          playTapSound();
+          const nextPoints = points + 1;
+          setPoints(nextPoints);
+
+          if (nextPoints > record) {
+            setRecord(nextPoints);
+            localStorage.setItem("diegoBounceRecord", String(nextPoints));
+          }
+
+          nextVy = -(4 + Math.min(nextPoints * 0.25, 6));
+          nextVx = nextVx + (Math.random() - 0.5) * 1.2;
         }
 
-        return nextY;
-      });
+        if (nextY > 360) {
+          setRunning(false);
+          setGameOver(true);
+          return b;
+        }
 
-      setPoints((p) => p + 1);
-    }, 28);
+        return { x: nextX, y: nextY, vx: nextVx, vy: nextVy };
+      });
+    }, 22);
 
     return () => clearInterval(loop);
-  }, [running, velocity, points]);
+  }, [running, paddleX, points, record, playTapSound]);
 
-  function tapGame() {
+  function startGame() {
     playTapSound();
+    setBall({ x: 140, y: 70, vx: 3, vy: 4 });
+    setPaddleX(95);
+    setPoints(0);
+    setGameOver(false);
+    setRunning(true);
+  }
 
-    if (!running) {
-      setY(130);
-      setVelocity(-8);
-      setPoints(0);
-      setGameOver(false);
-      setRunning(true);
-      return;
-    }
-
-    setVelocity(-8);
+  function movePaddle(e) {
+    const rect = e.currentTarget.getBoundingClientRect();
+    const clientX = e.touches ? e.touches[0].clientX : e.clientX;
+    const x = clientX - rect.left - 55;
+    setPaddleX(Math.max(10, Math.min(x, rect.width - 120)));
   }
 
   return (
@@ -2349,13 +2319,13 @@ function EmojiBalanceGame({ accent, playTapSound }) {
           </p>
 
           <h3 className={`${sora.className} mt-3 text-2xl font-bold text-white`}>
-            No dejes caer el objeto
+            Rebote extremo
           </h3>
         </div>
 
         <div className="text-right">
           <p className="text-xs text-zinc-500">Score</p>
-          <p className={`${sora.className} text-2xl font-bold ${accent.text}`}>
+          <p className={`${sora.className} text-3xl font-bold ${accent.text}`}>
             {points}
           </p>
         </div>
@@ -2377,34 +2347,50 @@ function EmojiBalanceGame({ accent, playTapSound }) {
         ))}
       </div>
 
-      <button
-        onClick={tapGame}
-        className="relative mt-6 h-80 w-full overflow-hidden rounded-[2rem] border border-white/10 bg-black/35"
+      <div
+        onMouseMove={movePaddle}
+        onTouchMove={movePaddle}
+        onClick={!running ? startGame : undefined}
+        className="relative mt-6 h-[380px] w-full overflow-hidden rounded-[2rem] border border-white/10 bg-[#fff8b8]/95 touch-none"
       >
-        <motion.div
-          animate={{ top: y }}
-          transition={{ duration: 0.05 }}
-          className="absolute left-1/2 -translate-x-1/2 text-6xl"
+        <div
+          className="absolute text-5xl"
+          style={{
+            left: `${ball.x}px`,
+            top: `${ball.y}px`,
+          }}
         >
           {emoji}
-        </motion.div>
+        </div>
+
+        <div className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 text-[8rem] font-black text-black/20">
+          {points}
+        </div>
+
+        <div
+          className="absolute bottom-8 h-11 rounded-full bg-black shadow-2xl"
+          style={{
+            left: `${paddleX}px`,
+            width: "110px",
+          }}
+        />
 
         {!running && (
-          <div className="absolute inset-0 flex items-center justify-center bg-black/30 text-center backdrop-blur-sm">
-            <p className="px-6 text-sm leading-7 text-zinc-300">
-              Toca para iniciar. Luego toca para que no caiga.
+          <div className="absolute inset-0 flex items-center justify-center bg-black/20 text-center backdrop-blur-[2px]">
+            <p className="rounded-2xl bg-black/70 px-6 py-4 text-sm font-bold text-white">
+              Toca para iniciar y mueve la barra con tu dedo
             </p>
           </div>
         )}
 
         {gameOver && (
-          <div className="absolute inset-0 flex items-center justify-center bg-black/50 text-center backdrop-blur-sm">
-            <p className={`${sora.className} text-2xl font-bold text-white`}>
+          <div className="absolute inset-0 flex items-center justify-center bg-black/35 text-center backdrop-blur-sm">
+            <p className={`${sora.className} rounded-2xl bg-black/80 px-6 py-4 text-2xl font-bold text-white`}>
               Game Over
             </p>
           </div>
         )}
-      </button>
+      </div>
 
       <div className="mt-5 flex items-center justify-between rounded-2xl border border-white/10 bg-white/[0.04] px-5 py-4">
         <span className="text-sm text-zinc-400">Mejor récord</span>
