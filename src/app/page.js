@@ -676,26 +676,7 @@ function sendFakeAI() {
       text="Aquí muestro proyectos, ideas en desarrollo y módulos que forman parte de mi crecimiento como desarrollador."
     />
 
-    <div className="mb-12 grid gap-7 xl:grid-cols-3">
-      {currentlyBuilding.map((item) => (
-        <div
-          key={item.title}
-          className="rounded-[2rem] border border-white/10 bg-black/25 p-7"
-        >
-          <p className={`text-xs uppercase tracking-[0.2em] ${accent.text}`}>
-            {item.status}
-          </p>
-
-          <h3 className={`${sora.className} mt-5 text-2xl font-bold text-white`}>
-            {item.title}
-          </h3>
-
-          <p className="mt-5 text-sm leading-8 text-zinc-400">
-            {item.text}
-          </p>
-        </div>
-      ))}
-    </div>
+  
 
     <div className="mb-12 rounded-[2rem] border border-white/10 bg-black/25 p-7">
       <p className={`text-xs uppercase tracking-[0.22em] ${accent.text}`}>
@@ -1562,38 +1543,23 @@ const projects = [
     status: "Labs",
   },
 ];
-const currentlyBuilding = [
-  {
-    title: "Diego.dev V1",
-    text:
-      "Mi identidad digital, proyectos, contacto, galería y sistema visual en una sola app.",
-    status: "En desarrollo",
-  },
 
-  {
-    title: "Asistente IA",
-    text:
-      "Una guía inteligente capaz de responder preguntas sobre mí, mis proyectos y tecnologías.",
-    status: "Próximo",
-  },
-
-  {
-    title: "Dashboard vivo",
-    text:
-      "Panel dinámico con actividad, música, estadísticas y estado del sistema en tiempo real.",
-    status: "Planeado",
-  },
-];
 
 const stack = [
   "React",
   "Next.js",
   "JavaScript",
-  "Tailwind",
+  "TypeScript",
+  "Tailwind CSS",
   "Framer Motion",
+  "Node.js",
   "Java",
   "GitHub",
-  "Diseño UI",
+  "Vercel",
+  "UI/UX Design",
+  "Artificial Intelligence",
+  "System Design",
+  "Interactive Experiences",
 ];
 
 
