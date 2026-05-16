@@ -700,7 +700,7 @@ function sendFakeAI() {
                       <h2
   className={`${sora.className} mt-7 max-w-[1050px] text-[2rem] font-bold leading-[1.05] tracking-[-0.05em] text-white md:mt-10 md:text-[4rem]`}
 >
-  {title}
+  {t.heroSubtitle}
 </h2>
 
                       <p className="mt-6 max-w-[420px] break-words text-[14.5px] leading-7 text-zinc-400">
@@ -1675,7 +1675,7 @@ function PageHeader({ eyebrow, title, text, accent }) {
       <h2
         className={`${sora.className} mt-10 max-w-[1050px] text-[2.4rem] font-bold leading-[1.02] tracking-[-0.05em] text-white md:text-[4rem]`}
       >
-        {t.heroSubtitle}
+        {title}
       </h2>
 
       <p className="mt-10 max-w-[820px] text-[15px] leading-9 text-zinc-400">
