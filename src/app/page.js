@@ -676,34 +676,35 @@ function sendFakeAI() {
       text="Aquí muestro proyectos, ideas en desarrollo y módulos que forman parte de mi crecimiento como desarrollador."
     />
 
-  
-
-    <div className="mb-12 rounded-[2rem] border border-white/10 bg-black/25 p-7">
-      <p className={`text-xs uppercase tracking-[0.22em] ${accent.text}`}>
-        Stack tecnológico
-      </p>
-
-      <h3 className={`${sora.className} mt-5 text-3xl font-bold text-white`}>
-        Herramientas que estoy usando y aprendiendo.
-      </h3>
-
-      <div className="mt-7 flex flex-wrap gap-3">
-        {stack.map((item) => (
-          <span
-            key={item}
-            className="rounded-full border border-white/10 bg-white/[0.05] px-5 py-3 text-sm text-zinc-300"
-          >
-            {item}
-          </span>
-        ))}
-      </div>
-    </div>
 
     <div className="grid gap-10 md:grid-cols-2 2xl:grid-cols-3">
-      {projects.map((item) => (
-        <FeatureCard key={item.title} item={item} accent={accent} />
-      ))}
-    </div>
+  {projects.map((item) => (
+    <FeatureCard key={item.title} item={item} accent={accent} />
+  ))}
+</div>
+
+<div className="mt-12 rounded-[2rem] border border-white/10 bg-black/25 p-7">
+
+  <p className={`text-xs uppercase tracking-[0.22em] ${accent.text}`}>
+    Stack tecnológico
+  </p>
+
+  <h3 className={`${sora.className} mt-5 text-3xl font-bold text-white`}>
+    Herramientas que estoy usando y aprendiendo.
+  </h3>
+
+  <div className="mt-7 flex flex-wrap gap-3">
+    {stack.map((item) => (
+      <span
+        key={item}
+        className="rounded-full border border-white/10 bg-white/[0.05] px-5 py-3 text-sm text-zinc-300"
+      >
+        {item}
+      </span>
+    ))}
+  </div>
+
+</div>
   </Screen>
 )}
 
