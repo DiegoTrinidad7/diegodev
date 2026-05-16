@@ -646,7 +646,7 @@ function sendFakeAI() {
 
       <AnimatePresence>{showIntro && <IntroScreen accent={accent} />}</AnimatePresence>
 
-      <div className="relative z-10 mx-auto flex min-h-screen max-w-[1450px] flex-col p-4 md:p-6">
+      <div className="relative z-10 mx-auto flex min-h-screen max-w-[1450px] flex-col p-3 pb-28 md:p-6">
        <div className="mb-5 flex flex-wrap gap-4">
   <div className="rounded-full border border-white/10 bg-black/30 px-5 py-3 text-xs uppercase tracking-[0.2em] text-emerald-300">
     System Online
@@ -689,16 +689,16 @@ function sendFakeAI() {
             <AnimatePresence mode="wait">
               {screen === "inicio" && (
                 <Screen key="inicio" accent={accent}>
-                  <div className="grid items-start gap-12 xl:grid-cols-[0.92fr_0.88fr]">
+                  <div className="grid items-start gap-12 grid-cols-1 xl:grid-cols-[0.92fr_0.88fr]">
                     <div className="pt-2">
                       <Pill accent={accent}>{t.badge}</Pill>
 
-                      <h1 className={`${sora.className} mt-6 max-w-[360px] break-words text-[2.9rem] font-bold leading-[0.95] tracking-[-0.05em] text-white md:text-[3.8rem]`}>
+                      <h1 className={`${sora.className} mt-6 max-w-full break-words text-[2.1rem] font-bold leading-[0.95] tracking-[-0.05em] text-white md:text-[3.8rem]`}>
                         {t.heroTitle}
                       </h1>
 
                       <h2
-  className={`${sora.className} mt-7 max-w-[1050px] text-[2rem] font-bold leading-[1.05] tracking-[-0.05em] text-white md:mt-10 md:text-[4rem]`}
+  className={`${sora.className} mt-7 max-w-full text-[2rem] font-bold leading-[1.05] tracking-[-0.05em] text-white md:mt-10 md:text-[4rem]`}
 >
   {t.heroSubtitle}
 </h2>
@@ -720,7 +720,7 @@ function sendFakeAI() {
                           Terminal
                         </GhostButton>
                       </div>
-<div className="mt-8 grid grid-cols-2 gap-3 xl:hidden">
+<div className="mt-8 grid grid-cols-1 sm:grid-cols-2 gap-3 xl:hidden">
   {[
     {
       title: "IA",
@@ -779,7 +779,7 @@ function sendFakeAI() {
   ))}
 </div>
                       <QuickStats accent={accent} />
-                      <div className="mt-8 overflow-x-auto xl:hidden">
+                      <div className="mt-8 xl:hidden">
   <div className="flex gap-4 pb-2">
     {[
       {
@@ -804,7 +804,7 @@ function sendFakeAI() {
           scale: 0.97,
         }}
         key={item.title}
-        className="min-w-[280px] rounded-[2rem] border border-white/10 bg-black/40 p-6 backdrop-blur-2xl"
+       className="w-full rounded-[2rem] border border-white/10 bg-black/40 p-6 backdrop-blur-2xl"
       >
         <div
           className={`h-14 w-14 rounded-2xl ${accent.bg} shadow-[0_0_30px_rgba(59,130,246,0.35)]`}
@@ -1317,12 +1317,12 @@ function MobileDock({
   ];
 
   return (
-    <div className="fixed bottom-5 left-1/2 z-50 flex -translate-x-1/2 gap-2 rounded-full border border-white/10 bg-black/70 px-3 py-3 backdrop-blur-2xl xl:hidden">
+    <div className="fixed bottom-4 left-1/2 z-50 flex w-[92vw] max-w-[420px] -translate-x-1/2 justify-between rounded-full border border-white/10 bg-black/80 px-3 py-3 backdrop-blur-2xl xl:hidden">
       {items.map((item) => (
         <button
           key={item.id}
           onClick={() => setScreen(item.id)}
-          className={`flex h-14 w-14 items-center justify-center rounded-full text-sm font-bold transition ${
+          className={`flex h-12 w-12 items-center justify-center rounded-full text-sm font-bold transition ${
             screen === item.id
               ? `${accent.bg} text-white shadow-[0_0_25px_rgba(59,130,246,0.45)]`
               : "text-zinc-500"
@@ -1656,7 +1656,7 @@ function Screen({ children, accent }) {
       transition={{ duration: 0.22 }}
       className={`min-w-0 rounded-[2rem] ring-1 ${accent?.ring || "ring-blue-400/20"}`}
     >
-      <div className="rounded-[2rem] p-7 md:p-10">
+     <div className="rounded-[2rem] p-4 md:p-10">
         <div className="min-w-0 rounded-[1.6rem]">{children}</div>
       </div>
     </motion.div>
@@ -1673,7 +1673,7 @@ function PageHeader({ eyebrow, title, text, accent }) {
       </p>
 
       <h2
-        className={`${sora.className} mt-10 max-w-[1050px] text-[2.4rem] font-bold leading-[1.02] tracking-[-0.05em] text-white md:text-[4rem]`}
+        className={`${sora.className} mt-10 max-w-full text-[2.4rem] font-bold leading-[1.02] tracking-[-0.05em] text-white md:text-[4rem]`}
       >
         {title}
       </h2>
@@ -1784,7 +1784,7 @@ function PhotoCard({ item }) {
 
 function Launchpad({ modules, setScreen, accent }) {
   return (
-    <div className="grid gap-4 md:grid-cols-2">
+    <div className="grid min-w-0 gap-4 md:grid-cols-2">
       {modules.map((module) => (
         <button
           key={module.id}
@@ -1839,7 +1839,7 @@ function QuickStats({ accent }) {
   ];
 
   return (
-    <div className="mt-8 grid max-w-[560px] gap-4 md:grid-cols-3">
+    <div className="mt-8 grid w-full gap-4 md:grid-cols-3">
       {stats.map((item) => (
         <div key={item.label} className="min-w-0 overflow-hidden rounded-[1.4rem] border border-white/10 bg-black/25 p-4 transition hover:border-white/20 hover:bg-white/[0.05]">
           <p className="break-words text-[10px] uppercase tracking-[0.12em] text-zinc-500">
@@ -1950,7 +1950,7 @@ const stack = [
 
 function FeatureCard({ item, accent }) {
   return (
-    <div className="group relative min-w-0 overflow-hidden rounded-[2.3rem] border border-white/10 bg-black/25 p-7 transition duration-300 hover:-translate-y-1 hover:border-white/20 hover:bg-white/[0.05]">
+    <div className="group relative min-w-0 overflow-hidden rounded-[2.3rem] border border-white/10 bg-black/25 p-5 md:p-7 transition duration-300 hover:-translate-y-1 hover:border-white/20 hover:bg-white/[0.05]">
       <div className={`absolute inset-0 opacity-0 transition duration-500 group-hover:opacity-100 bg-gradient-to-br ${accent.glow}`} />
       <div className="relative z-10 min-w-0">
         <div className="flex flex-wrap items-center justify-between gap-4">
