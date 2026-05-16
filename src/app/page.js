@@ -25,6 +25,7 @@ export default function Home() {
   const [musicPlaying, setMusicPlaying] = useState(false);
   const [activeQuestion, setActiveQuestion] = useState(0);
   const [visitorMessage, setVisitorMessage] = useState("");
+  const [visitorName, setVisitorName] = useState("");
   const [score, setScore] = useState(0);
 const [bestScore, setBestScore] = useState(0);
 
@@ -671,7 +672,6 @@ function sendFakeAI() {
   setMood={setMood}
   accent={accent}
 />
-        <Header menu={menu} screen={screen} setScreen={setScreen} language={language} setLanguage={setLanguage} online={t.online} />
 
         <div className="grid flex-1 gap-7 pt-7 xl:grid-cols-[280px_1fr]">
           <SidePanel
@@ -1475,19 +1475,7 @@ function Header({ menu, screen, setScreen, language, setLanguage, online, mood, 
         </div>
       </div>
 <div className="mt-4 grid grid-cols-4 gap-2 xl:hidden">
-  {["azul", "morado", "verde", "rojo"].map((item) => (
-    <button
-      key={item}
-      onClick={() => setMood(item)}
-      className={`rounded-2xl border px-3 py-3 text-[11px] font-bold capitalize ${
-        mood === item
-          ? `${accent.bg} border-white/20 text-white`
-          : "border-white/10 bg-black/30 text-zinc-400"
-      }`}
-    >
-      {item}
-    </button>
-  ))}
+
 </div>
 
 <div className="mt-4 grid grid-cols-4 gap-2 xl:hidden">
@@ -1687,7 +1675,7 @@ function PageHeader({ eyebrow, title, text, accent }) {
       <h2
         className={`${sora.className} mt-10 max-w-[1050px] text-[2.4rem] font-bold leading-[1.02] tracking-[-0.05em] text-white md:text-[4rem]`}
       >
-        {title}
+        {t.heroSubtitle}
       </h2>
 
       <p className="mt-10 max-w-[820px] text-[15px] leading-9 text-zinc-400">
