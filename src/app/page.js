@@ -28,13 +28,6 @@ export default function Home() {
   const [visitorName, setVisitorName] = useState("");
 
 
-useEffect(() => {
-  const saved = localStorage.getItem("diegoBestScore");
-
-  if (saved) {
-    setBestScore(Number(saved));
-  }
-}, []);
 function playTapSound() {
   try {
     const audioContext = new (window.AudioContext || window.webkitAudioContext)();
@@ -317,130 +310,14 @@ const [nowPlaying] = useState({
   }[mood];
 
   const menu = [
-    { id: "inicio", label: t.nav.inicio, icon: "⌂" },
-    { id: "identidad", label: t.nav.identidad, icon: "ID" },
-    { id: "proyectos", label: t.nav.proyectos, icon: "▣" },
-    { id: "laboratorio", label: t.nav.laboratorio, icon: "✦" },
-    { id: "panel", label: t.nav.panel, icon: "◌" },
-    { id: "ia", label: t.nav.ia, icon: "AI" },
-    { id: "galeria", label: t.nav.galeria, icon: "▧" },
-    { id: "ideas", label: t.nav.ideas, icon: "✧" },
-    { id: "timeline", label: t.nav.timeline, icon: "↗" },
-    { id: "logros", label: t.nav.logros, icon: "✓" },
-    { id: "qr", label: t.nav.qr, icon: "QR" },
-    { id: "terminal", label: t.nav.terminal, icon: ">" },
-    { id: "contacto", label: t.nav.contacto, icon: "@" },
-  ];
+  { id: "inicio", label: t.nav.inicio, icon: "⌂" },
+  { id: "identidad", label: t.nav.identidad, icon: "ID" },
+  { id: "proyectos", label: t.nav.proyectos, icon: "▣" },
+  { id: "ia", label: t.nav.ia, icon: "AI" },
+  { id: "terminal", label: t.nav.terminal, icon: ">" },
+  { id: "contacto", label: t.nav.contacto, icon: "@" },
+];
 
-  const modules = [
-    {
-      id: "identidad",
-      title: "Identidad",
-      text: "Quién soy, mi historia, mi foto y mi camino.",
-      label: "Perfil",
-    },
-    {
-      id: "proyectos",
-      title: "Proyectos",
-      text: "Apps, prototipos e ideas que voy construyendo.",
-      label: "Builds",
-    },
-    {
-      id: "laboratorio",
-      title: "Laboratorio",
-      text: "Experimentos visuales, funciones raras y easter eggs.",
-      label: "Creativo",
-    },
-    {
-      id: "ia",
-      title: "Asistente IA",
-      text: "Una guía digital que responderá sobre mí.",
-      label: "Próximo",
-    },
-  ];
-
-  const projects = [
-    {
-      tag: "Principal",
-      title: "Diego.dev",
-      text:
-        "Mi app web personal. Aquí junto identidad, proyectos, contacto, galería, panel vivo, IA y un sistema interactivo.",
-      status: "Activo",
-    },
-    {
-      tag: "Próxima fase",
-      title: "Asistente IA",
-      text:
-        "Un chatbot que podrá explicar quién soy, qué estudio, qué proyectos tengo y cómo contactarme.",
-      status: "Planeado",
-    },
-    {
-      tag: "Datos reales",
-      title: "Panel vivo",
-      text:
-        "Una sección con visitas, clima, música, actividad, estado del sistema y métricas reales.",
-      status: "Planeado",
-    },
-    {
-      tag: "Creativo",
-      title: "Mini mundo digital",
-      text:
-        "Una forma más visual de explorar mis módulos como si fuera un pequeño sistema o mapa interactivo.",
-      status: "Idea",
-    },
-    {
-      tag: "Contenido",
-      title: "Bitácora.dev",
-      text:
-        "Un espacio donde pueda escribir avances, errores, aprendizajes y momentos importantes.",
-      status: "Idea",
-    },
-    {
-      tag: "Visual",
-      title: "Galería personal",
-      text:
-        "Fotos, capturas de proyectos, momentos y avances para que la web se sienta más humana.",
-      status: "Idea",
-    },
-  ];
-
-  const labIdeas = [
-    {
-      title: "Terminal secreta",
-      text: "Comandos como help, whoami, proyectos, contacto, neo y desbloquear.",
-    },
-    {
-      title: "Modo mood",
-      text: "Cambiar el estilo visual de la app entre azul, morado, verde y rojo.",
-    },
-    {
-      title: "Easter eggs",
-      text: "Mensajes ocultos, animaciones especiales y detalles para quien explore.",
-    },
-    {
-      title: "Tarjetas 3D",
-      text: "Módulos con profundidad, hover suave y movimiento elegante.",
-    },
-    {
-      title: "Galería cinematográfica",
-      text: "Fotos con estilo editorial, bordes suaves y texto mínimo.",
-    },
-    {
-      title: "Sistema de niveles",
-      text: "Mostrar habilidades y progreso como si fueran logros desbloqueables.",
-    },
-  ];
-
-  const dashboard = [
-{ title: "Modo", value: "Cinematic", text: "Experiencia visual inmersiva activa." },
-{ title: "Sistema", value: "Estable", text: "Todos los módulos funcionando correctamente." },
-    { title: "Hora local", value: time, text: date },
-    { title: "Visitas", value: "Pronto", text: "Contador real de visitantes." },
-    { title: "Clima", value: "Pronto", text: "Clima real integrado." },
-    { title: "Música", value: "Pronto", text: "Música actual o estado creativo." },
-    { title: "Actividad", value: "Pronto", text: "Últimos cambios del proyecto." },
-    { title: "Estado", value: "Activo", text: "Sistema funcionando localmente." },
-  ];
 
   const skills = [
     { name: "Java", value: 65 },
@@ -451,33 +328,8 @@ const [nowPlaying] = useState({
     { name: "Backend", value: 20 },
   ];
 
-  const gallery = [
-    { title: "Foto principal", path: "/images/profile" },
-    { title: "Imagen de inicio", path: "/images/hero" },
-    { title: "Momento personal", path: "/images/photo-1" },
-    { title: "Proyecto en proceso", path: "/images/project-1" },
-    { title: "Captura de código", path: "/images/code-1" },
-    { title: "Universidad", path: "/images/university" },
-    { title: "Foto extra", path: "/images/photo-2" },
-  ];
 
-  const ideas = [
-    { title: "Muro de ideas", text: "Un lugar donde pueda guardar ideas rápidas para futuros proyectos." },
-    { title: "Preguntas rápidas", text: "Botones tipo: ¿Quién es Diego?, ¿Qué sabe hacer?, ¿Cómo lo contacto?" },
-    { title: "Modo historia", text: "Una línea de tiempo de cómo voy aprendiendo y creando cosas." },
-    { title: "Sistema de logros", text: "Insignias por aprender tecnologías, terminar proyectos o publicar avances." },
-    { title: "Portal de entrada", text: "Efectos de entrada por módulo para que cada sección se sienta como abrir una ventana distinta." },
-    { title: "QR personal", text: "Un QR para compartir mi página en eventos, clases o Instagram." },
-  ];
-
-  const vision = [
-    { title: "Asistente IA real", text: "Una IA que responda preguntas sobre mí, mis proyectos, mi carrera y mis formas de contacto." },
-    { title: "Mapa interactivo", text: "Una navegación tipo mundo digital donde cada sección sea un portal distinto." },
-    { title: "Modo cinematic", text: "Animaciones suaves, partículas, transiciones y estética visual tipo sistema futurista." },
-    { title: "Perfil vivo", text: "Mostrar actividad, música, clima, cambios recientes y datos reales del proyecto." },
-    { title: "Sistema de progreso", text: "Desbloquear tecnologías, módulos y logros conforme aprendo y construyo más." },
-    { title: "Experiencia memorable", text: "Que cada persona recuerde Diego.dev después de entrar, no solo como una página, sino como una experiencia." },
-  ];
+  
 
   const timeline = [
     { year: "2025", title: "Inicio con programación", text: "Primeros pasos con lógica, Java y conceptos de programación orientada a objetos." },
@@ -496,15 +348,6 @@ const [nowPlaying] = useState({
   "Busca sentirse vivo.",
 ];
 
-
-  const achievements = [
-    { title: "Java Fundamentals", text: "Bases de programación, clases, objetos y lógica.", level: "Desbloqueado" },
-    { title: "POO", text: "Encapsulación, herencia, polimorfismo y abstracción.", level: "En progreso" },
-    { title: "UI Design", text: "Interfaces visuales, distribución, color y experiencia.", level: "En progreso" },
-    { title: "React", text: "Componentes, estado, eventos y estructura visual.", level: "Iniciado" },
-    { title: "Next.js", text: "App web moderna, rutas, frontend y despliegue futuro.", level: "Iniciado" },
-    { title: "AI Concepts", text: "Ideas de asistentes, respuestas y sistemas inteligentes.", level: "Explorando" },
-  ];
 
   const quickQuestions = [
     { question: "¿Quién soy?", answer: "Soy Diego, estudiante mexicano de Ingeniería en Tecnología de Software." },
@@ -713,15 +556,7 @@ function sendFakeAI() {
   <AnonymousMessage accent={accent} />
 </div>
                       
-                      <div className="mt-8">
- <InteractiveZone
-  accent={accent}
-  visitorMessage={visitorMessage}
-  setVisitorMessage={setVisitorMessage}
-  saveVisitorMessage={saveVisitorMessage}
-  savedMessages={savedMessages}
-/>
-</div>
+                    
                       <div className="mt-8 rounded-[2rem] border border-white/10 bg-black/25 p-6">
   <p className={`text-xs uppercase tracking-[0.2em] ${accent.text}`}>
     Activity Feed
@@ -742,7 +577,7 @@ function sendFakeAI() {
 
                     <div className="grid content-start gap-5">
                       <HeroPhoto accent={accent} />
-                      <Launchpad modules={modules} setScreen={setScreen} accent={accent} />
+                  
                     </div>
                   </div>
                 </Screen>
@@ -869,33 +704,6 @@ function sendFakeAI() {
   </Screen>
 )}
 
-              {screen === "laboratorio" && (
-                <Screen key="laboratorio" accent={accent}>
-                  <PageHeader accent={accent} eyebrow="Sistema experimental" title="Experiencias visuales y módulos especiales." text="Esta parte será para experimentar: no todo tiene que ser formal. Aquí pueden vivir ideas locas, efectos, pruebas y funciones ocultas." />
-
-                  <div className="grid gap-7 md:grid-cols-2 2xl:grid-cols-3">
-                    {labIdeas.map((item) => (
-                      <SimpleCard key={item.title} item={item} accent={accent} />
-                    ))}
-                  </div>
-                </Screen>
-              )}
-
-              {screen === "panel" && (
-                <Screen key="panel" accent={accent}>
-                  <PageHeader accent={accent} eyebrow="Panel vivo" title="Datos reales dentro de la app." text="Poco a poco esta sección tendrá información real y dinámica para que Diego.dev se sienta como una app viva." />
-
-                  <div className="grid gap-7 md:grid-cols-2 2xl:grid-cols-3">
-                    {dashboard.map((item) => (
-                      <DashboardCard key={item.title} item={item} accent={accent} />
-                    ))}
-                  </div>
-
-                  <div className="mt-8">
-                    <SkillTree skills={skills} accent={accent} />
-                  </div>
-                </Screen>
-              )}
 
               {screen === "ia" && (
   <Screen key="ia" accent={accent}>
@@ -996,34 +804,8 @@ function sendFakeAI() {
     </div>
   </Screen>
 )}
-              {screen === "galeria" && (
-                <Screen key="galeria" accent={accent}>
-                  <PageHeader accent={accent} eyebrow="Galería" title="Fotos, capturas y momentos." text="Aquí puedes poner fotos tuyas, capturas de proyectos, avances de código y momentos que hagan que la app se sienta más humana." />
-
-                  <div className="grid gap-7 md:grid-cols-2 2xl:grid-cols-3">
-                    {gallery.map((item) => (
-                      <PhotoCard key={item.title} item={item} />
-                    ))}
-                  </div>
-                </Screen>
-              )}
-
-              {screen === "ideas" && (
-                <Screen key="ideas" accent={accent}>
-                  <PageHeader
-  accent={accent}
-  eyebrow="Experiencias"
-  title="Experiencias digitales dentro del ecosistema Diego.dev."
-  text="Cada módulo fue diseñado para convertir esta página en una experiencia visual, interactiva y memorable."
-/>
-
-                  <div className="grid gap-7 md:grid-cols-2 2xl:grid-cols-3">
-                    {ideas.map((item) => (
-                      <SimpleCard key={item.title} item={item} accent={accent} />
-                    ))}
-                  </div>
-                </Screen>
-              )}
+              
+      
 
              
 
@@ -1039,68 +821,10 @@ function sendFakeAI() {
                 </Screen>
               )}
 
-{screen === "vision" && (
-  <Screen key="vision" accent={accent}>
-    <PageHeader
-      accent={accent}
-      eyebrow="Manifiesto"
-      title="Una identidad digital diseñada para sentirse viva."
-      text="Diego.dev no fue construido como un portafolio tradicional. Fue diseñado como una experiencia."
-    />
 
-    <div className="grid gap-7">
-      {manifesto.map((item, index) => (
-        <div
-          key={index}
-          className="rounded-[2rem] border border-white/10 bg-black/25 p-8"
-        >
-          <p
-            className={`${sora.className} text-2xl md:text-4xl font-bold tracking-[-0.04em] text-white`}
-          >
-            {item}
-          </p>
-        </div>
-      ))}
-    </div>
-  </Screen>
-)}
 
-              {screen === "logros" && (
-                <Screen key="logros" accent={accent}>
-                  <PageHeader accent={accent} eyebrow="Logros" title="Sistema de logros." text="Una forma visual de mostrar avances, habilidades y tecnologías desbloqueadas durante mi proceso." />
 
-                  <div className="grid gap-7 md:grid-cols-2 2xl:grid-cols-3">
-                    {achievements.map((item) => (
-                      <AchievementCard key={item.title} item={item} accent={accent} />
-                    ))}
-                  </div>
-                </Screen>
-              )}
-
-              {screen === "qr" && (
-                <Screen key="qr" accent={accent}>
-                  <PageHeader accent={accent} eyebrow="QR personal" title="Comparte Diego.dev rápido." text="Este módulo será para poner un QR real de tu página cuando ya esté publicada." />
-
-                  <div className="grid gap-8 xl:grid-cols-[0.8fr_1.2fr]">
-                    <QRBox accent={accent} />
-
-                    <Panel>
-                      <p className={`break-words text-xs uppercase tracking-[0.22em] ${accent.text}`}>
-                        Cómo se usará
-                      </p>
-                      <h3 className={`${sora.className} mt-5 break-words text-3xl font-bold`}>
-                        Ideal para Instagram, clases y eventos.
-                      </h3>
-                      <p className="mt-5 break-words text-sm leading-8 text-zinc-400">
-                        Cuando publiquemos tu app, generamos un QR real y lo
-                        colocamos aquí. Así puedes compartir tu página en una
-                        presentación, en una historia de Instagram o con alguien
-                        que quiera ver tu perfil.
-                      </p>
-                    </Panel>
-                  </div>
-                </Screen>
-              )}
+      
 
               {screen === "terminal" && (
                 <Screen key="terminal" accent={accent}>
