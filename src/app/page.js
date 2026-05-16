@@ -24,6 +24,112 @@ export default function Home() {
   const [command, setCommand] = useState("");
   const [musicPlaying, setMusicPlaying] = useState(false);
   const [activeQuestion, setActiveQuestion] = useState(0);
+  const [visitorMessage, setVisitorMessage] = useState("");
+  const [score, setScore] = useState(0);
+const [bestScore, setBestScore] = useState(0);
+
+useEffect(() => {
+  const saved = localStorage.getItem("diegoBestScore");
+
+  if (saved) {
+    setBestScore(Number(saved));
+  }
+}, []);
+function playTapSound() {
+  try {
+    const audioContext = new (window.AudioContext || window.webkitAudioContext)();
+    const oscillator = audioContext.createOscillator();
+    const gain = audioContext.createGain();
+
+    oscillator.type = "sine";
+    oscillator.frequency.setValueAtTime(520, audioContext.currentTime);
+
+    gain.gain.setValueAtTime(0.08, audioContext.currentTime);
+    gain.gain.exponentialRampToValueAtTime(0.001, audioContext.currentTime + 0.08);
+
+    oscillator.connect(gain);
+    gain.connect(audioContext.destination);
+
+    oscillator.start();
+    oscillator.stop(audioContext.currentTime + 0.08);
+
+    if (navigator.vibrate) {
+      navigator.vibrate(15);
+    }
+  } catch (error) {
+    console.log("Audio no disponible");
+  }
+}
+function addPoint() {
+  playTapSound();
+  const next = score + 1;
+
+  setScore(next);
+
+  if (next > bestScore) {
+    setBestScore(next);
+
+    localStorage.setItem(
+      "diegoBestScore",
+      String(next)
+    );
+  }
+}
+const [savedMessages, setSavedMessages] = useState([]);
+
+useEffect(() => {
+  const stored = localStorage.getItem("diegoMessages");
+  if (stored) setSavedMessages(JSON.parse(stored));
+}, []);
+
+async function saveVisitorMessage() {
+  if (!visitorMessage.trim()) return;
+
+  try {
+    const response = await fetch("/api/contact", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        name: visitorName || "Visitante",
+        email: "usuario@diego.dev",
+        message: visitorMessage,
+      }),
+    });
+
+    if (response.ok) {
+      const newMessages = [
+        {
+          name: visitorName.trim() || "Visitante",
+          text: visitorMessage,
+          date: new Date().toLocaleString("es-MX"),
+        },
+        ...savedMessages,
+      ].slice(0, 5);
+
+      setSavedMessages(newMessages);
+
+      localStorage.setItem(
+        "diegoMessages",
+        JSON.stringify(newMessages)
+      );
+
+      setVisitorName("");
+      setVisitorMessage("");
+
+      if (navigator.vibrate) {
+        navigator.vibrate(25);
+      }
+
+      alert("Mensaje enviado 🚀");
+    }
+  } catch (error) {
+    console.error(error);
+
+    alert("Error enviando mensaje");
+  }
+}
   const [aiMessages, setAiMessages] = useState([
   {
     type: "bot",
@@ -553,6 +659,18 @@ function sendFakeAI() {
     Visual Engine Running
   </div>
 </div>
+
+<Header
+  menu={menu}
+  screen={screen}
+  setScreen={setScreen}
+  language={language}
+  setLanguage={setLanguage}
+  online={t.online}
+  mood={mood}
+  setMood={setMood}
+  accent={accent}
+/>
         <Header menu={menu} screen={screen} setScreen={setScreen} language={language} setLanguage={setLanguage} online={t.online} />
 
         <div className="grid flex-1 gap-7 pt-7 xl:grid-cols-[280px_1fr]">
@@ -602,8 +720,132 @@ function sendFakeAI() {
                           Terminal
                         </GhostButton>
                       </div>
+<div className="mt-8 grid grid-cols-2 gap-3 xl:hidden">
+  {[
+    {
+      title: "IA",
+      icon: "◉",
+      screen: "ia",
+    },
+    {
+      title: "Juego",
+      icon: "✦",
+      screen: "terminal",
+    },
+    {
+      title: "Core",
+      icon: "◎",
+      screen: "inicio",
+    },
+    {
+      title: "Contacto",
+      icon: "@",
+      screen: "contacto",
+    },
+  ].map((item) => (
+    <button
+      key={item.title}
+      onClick={() => {
+        setScreen(item.screen);
 
+        if (navigator.vibrate) {
+          navigator.vibrate(18);
+        }
+      }}
+      className={`group relative overflow-hidden rounded-[2rem] border border-white/10 bg-black/40 p-5 text-left backdrop-blur-xl transition active:scale-[0.97]`}
+    >
+      <div
+        className={`absolute inset-0 opacity-0 transition group-active:opacity-100 ${accent.bg}`}
+      />
+
+      <div className="relative z-10">
+        <div
+          className={`flex h-12 w-12 items-center justify-center rounded-2xl ${accent.bg} text-xl text-white shadow-[0_0_25px_rgba(59,130,246,0.35)]`}
+        >
+          {item.icon}
+        </div>
+
+        <p
+          className={`${sora.className} mt-5 text-lg font-bold text-white`}
+        >
+          {item.title}
+        </p>
+
+        <p className="mt-1 text-xs text-zinc-500">
+          Interactive module
+        </p>
+      </div>
+    </button>
+  ))}
+</div>
                       <QuickStats accent={accent} />
+                      <div className="mt-8 overflow-x-auto xl:hidden">
+  <div className="flex gap-4 pb-2">
+    {[
+      {
+        title: "Sistema IA",
+        desc: "Interactive intelligence core",
+      },
+      {
+        title: "Visual Engine",
+        desc: "Dynamic experience modules",
+      },
+      {
+        title: "Digital Lab",
+        desc: "Experimental interactions",
+      },
+      {
+        title: "Memory System",
+        desc: "Live immersive interface",
+      },
+    ].map((item) => (
+      <motion.div
+        whileTap={{
+          scale: 0.97,
+        }}
+        key={item.title}
+        className="min-w-[280px] rounded-[2rem] border border-white/10 bg-black/40 p-6 backdrop-blur-2xl"
+      >
+        <div
+          className={`h-14 w-14 rounded-2xl ${accent.bg} shadow-[0_0_30px_rgba(59,130,246,0.35)]`}
+        />
+
+        <h3
+          className={`${sora.className} mt-6 text-2xl font-bold text-white`}
+        >
+          {item.title}
+        </h3>
+
+        <p className="mt-3 text-sm leading-7 text-zinc-400">
+          {item.desc}
+        </p>
+      </motion.div>
+    ))}
+  </div>
+</div>
+                      <div className="mt-8">
+
+                      <div className="mt-8">
+  <LiveCore accent={accent} playTapSound={playTapSound} />
+</div>
+  <TapGame
+    accent={accent}
+    score={score}
+    bestScore={bestScore}
+    addPoint={addPoint}
+  />
+</div>
+                      <div className="mt-8">
+  <InteractiveZone
+    accent={accent}
+    mood={mood}
+    setMood={setMood}
+    visitorMessage={visitorMessage}
+    setVisitorMessage={setVisitorMessage}
+    saveVisitorMessage={saveVisitorMessage}
+    savedMessages={savedMessages}
+  />
+</div>
                       <div className="mt-8 rounded-[2rem] border border-white/10 bg-black/25 p-6">
   <p className={`text-xs uppercase tracking-[0.2em] ${accent.text}`}>
     Activity Feed
@@ -1038,10 +1280,60 @@ function sendFakeAI() {
           </section>
         </div>
       </div>
+      <MobileDock
+  screen={screen}
+  setScreen={setScreen}
+  accent={accent}
+/>
     </main>
   );
 }
+function MobileDock({
+  screen,
+  setScreen,
+  accent,
+}) {
+  const items = [
+    {
+      id: "inicio",
+      icon: "⌂",
+    },
+    {
+      id: "ia",
+      icon: "AI",
+    },
+    {
+      id: "proyectos",
+      icon: "▣",
+    },
+    {
+      id: "terminal",
+      icon: ">_",
+    },
+    {
+      id: "contacto",
+      icon: "@",
+    },
+  ];
 
+  return (
+    <div className="fixed bottom-5 left-1/2 z-50 flex -translate-x-1/2 gap-2 rounded-full border border-white/10 bg-black/70 px-3 py-3 backdrop-blur-2xl xl:hidden">
+      {items.map((item) => (
+        <button
+          key={item.id}
+          onClick={() => setScreen(item.id)}
+          className={`flex h-14 w-14 items-center justify-center rounded-full text-sm font-bold transition ${
+            screen === item.id
+              ? `${accent.bg} text-white shadow-[0_0_25px_rgba(59,130,246,0.45)]`
+              : "text-zinc-500"
+          }`}
+        >
+          {item.icon}
+        </button>
+      ))}
+    </div>
+  );
+}
 function IntroScreen({ accent }) {
   return (
     <motion.div
@@ -1121,7 +1413,7 @@ function Background({ mood }) {
   );
 }
 
-function Header({ menu, screen, setScreen, language, setLanguage, online }) {
+function Header({ menu, screen, setScreen, language, setLanguage, online, mood, setMood, accent }) {
   return (
    <header className="rounded-[2rem] border border-white/10 bg-white/[0.04] px-3 py-4 backdrop-blur-2xl">
       <div className="flex items-center justify-between gap-4">
@@ -1182,7 +1474,40 @@ function Header({ menu, screen, setScreen, language, setLanguage, online }) {
           </div>
         </div>
       </div>
+<div className="mt-4 grid grid-cols-4 gap-2 xl:hidden">
+  {["azul", "morado", "verde", "rojo"].map((item) => (
+    <button
+      key={item}
+      onClick={() => setMood(item)}
+      className={`rounded-2xl border px-3 py-3 text-[11px] font-bold capitalize ${
+        mood === item
+          ? `${accent.bg} border-white/20 text-white`
+          : "border-white/10 bg-black/30 text-zinc-400"
+      }`}
+    >
+      {item}
+    </button>
+  ))}
+</div>
 
+<div className="mt-4 grid grid-cols-4 gap-2 xl:hidden">
+  {["azul", "morado", "verde", "rojo"].map((item) => (
+    <button
+      key={item}
+      onClick={() => {
+        setMood(item);
+        if (navigator.vibrate) navigator.vibrate(15);
+      }}
+      className={`rounded-2xl border px-3 py-3 text-[11px] font-bold capitalize transition ${
+        mood === item
+          ? `${accent.bg} border-white/20 text-white shadow-[0_0_18px_rgba(59,130,246,0.28)]`
+          : "border-white/10 bg-black/30 text-zinc-400"
+      }`}
+    >
+      {item}
+    </button>
+  ))}
+</div>
       <div className="mt-4 flex gap-2 overflow-x-auto 2xl:hidden">
         {menu.map((item) => (
           <button
@@ -1849,6 +2174,221 @@ function ScanOverlay({ screen }) {
         transition={{ duration: 0.6 }}
       />
     </motion.div>
+  );
+}
+
+function LiveCore({ accent, playTapSound }) {
+  return (
+    <Panel>
+      <div className="flex flex-col items-center text-center">
+        <p className={`text-xs uppercase tracking-[0.2em] ${accent.text}`}>
+          Live Core
+        </p>
+
+        <button
+          onClick={playTapSound}
+          className="relative mt-8 flex h-48 w-48 items-center justify-center rounded-full"
+        >
+          <motion.div
+            animate={{
+              scale: [1, 1.08, 1],
+              opacity: [0.6, 1, 0.6],
+            }}
+            transition={{
+              duration: 2,
+              repeat: Infinity,
+            }}
+            className={`absolute inset-0 rounded-full ${accent.bg} blur-3xl opacity-40`}
+          />
+
+          <motion.div
+            animate={{ rotate: 360 }}
+            transition={{
+              duration: 12,
+              repeat: Infinity,
+              ease: "linear",
+            }}
+            className="absolute inset-3 rounded-full border border-white/10 border-t-white/60"
+          />
+
+          <motion.div
+            animate={{ rotate: -360 }}
+            transition={{
+              duration: 18,
+              repeat: Infinity,
+              ease: "linear",
+            }}
+            className="absolute inset-8 rounded-full border border-blue-300/20 border-b-blue-300/70"
+          />
+
+          <div className="relative z-10 h-24 w-24 rounded-full border border-white/20 bg-black/50 shadow-[0_0_40px_rgba(59,130,246,0.45)]" />
+        </button>
+
+        <h3 className={`${sora.className} mt-8 text-2xl font-bold text-white`}>
+          Núcleo interactivo
+        </h3>
+
+        <p className="mt-3 max-w-sm text-sm leading-7 text-zinc-400">
+          Toca el núcleo para activar respuesta háptica y energía visual.
+        </p>
+      </div>
+    </Panel>
+  );
+}
+function TapGame({
+  accent,
+  score,
+  bestScore,
+  addPoint,
+}) {
+  const orbs = useMemo(
+    () => Array.from({ length: 9 }),
+    []
+  );
+
+  return (
+    <Panel>
+      <div className="flex items-center justify-between gap-4">
+        <div>
+          <p
+            className={`text-xs uppercase tracking-[0.2em] ${accent.text}`}
+          >
+            Mini juego
+          </p>
+
+          <h3
+            className={`${sora.className} mt-3 text-2xl font-bold text-white`}
+          >
+            Atrapa energía
+          </h3>
+        </div>
+
+        <div className="text-right">
+          <p className="text-xs text-zinc-500">
+            Score
+          </p>
+
+          <p
+            className={`${sora.className} text-2xl font-bold ${accent.text}`}
+          >
+            {score}
+          </p>
+        </div>
+      </div>
+
+      <div className="relative mt-6 h-64 overflow-hidden rounded-[2rem] border border-white/10 bg-black/35">
+        {orbs.map((_, index) => (
+          <motion.button
+            key={index}
+            onClick={addPoint}
+            className={`absolute h-12 w-12 rounded-full ${accent.bg} shadow-[0_0_30px_rgba(59,130,246,0.45)]`}
+            style={{
+              left: `${8 + ((index * 31) % 78)}%`,
+              top: `${10 + ((index * 47) % 72)}%`,
+            }}
+            animate={{
+              y: [0, -18, 0],
+              scale: [1, 1.12, 1],
+              opacity: [0.75, 1, 0.75],
+            }}
+            transition={{
+              duration: 1.8 + index * 0.12,
+              repeat: Infinity,
+            }}
+          />
+        ))}
+      </div>
+
+      <div className="mt-5 flex items-center justify-between rounded-2xl border border-white/10 bg-white/[0.04] px-5 py-4">
+        <span className="text-sm text-zinc-400">
+          Mejor récord
+        </span>
+
+        <span
+          className={`${sora.className} font-bold ${accent.text}`}
+        >
+          {bestScore}
+        </span>
+      </div>
+    </Panel>
+  );
+}
+function InteractiveZone({
+  accent,
+  mood,
+  setMood,
+  visitorMessage,
+  setVisitorMessage,
+  saveVisitorMessage,
+  savedMessages,
+}) {
+  return (
+    <div className="grid gap-5 md:grid-cols-2">
+      <Panel>
+        <p className={`text-xs uppercase tracking-[0.2em] ${accent.text}`}>
+          Mood Game
+        </p>
+
+        <h3 className={`${sora.className} mt-4 text-2xl font-bold text-white`}>
+          Elige la energía
+        </h3>
+
+        <div className="mt-6 grid grid-cols-2 gap-3">
+          {["azul", "morado", "verde", "rojo"].map((item) => (
+            <button
+              key={item}
+              onClick={() => setMood(item)}
+              className={`rounded-2xl border px-4 py-4 text-sm font-bold capitalize transition ${
+                mood === item
+                  ? `${accent.bg} border-white/20 text-white`
+                  : "border-white/10 bg-white/[0.04] text-zinc-400"
+              }`}
+            >
+              {item}
+            </button>
+          ))}
+        </div>
+      </Panel>
+
+      <Panel>
+        <p className={`text-xs uppercase tracking-[0.2em] ${accent.text}`}>
+          Visitor Message
+        </p>
+
+        <h3 className={`${sora.className} mt-4 text-2xl font-bold text-white`}>
+          Deja un mensaje
+        </h3>
+
+        <textarea
+          value={visitorMessage}
+          onChange={(e) => setVisitorMessage(e.target.value)}
+          placeholder="Escribe algo..."
+          className="mt-5 min-h-28 w-full resize-none rounded-2xl border border-white/10 bg-black/40 p-4 text-sm text-white outline-none"
+        />
+
+        <button
+          onClick={saveVisitorMessage}
+          className={`mt-4 rounded-full px-6 py-3 text-sm font-bold text-white ${accent.bg}`}
+        >
+          Guardar
+        </button>
+
+        <div className="mt-5 space-y-3">
+          {savedMessages.map((msg, index) => (
+            <div
+              key={index}
+              className="rounded-2xl border border-white/10 bg-white/[0.04] p-4"
+            >
+              <p className="text-sm text-zinc-300">{msg.text}</p>
+
+              <p className="mt-2 text-[10px] uppercase tracking-[0.16em] text-zinc-500">
+                {msg.date}
+              </p>
+            </div>
+          ))}
+        </div>
+      </Panel>
+    </div>
   );
 }
 function ContactCard({ item }) {
