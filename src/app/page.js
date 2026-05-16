@@ -730,7 +730,7 @@ function sendFakeAI() {
     {
       title: "Juego",
       icon: "✦",
-      screen: "terminal",
+      screen: "inicio",
     },
     {
       title: "Core",
@@ -780,8 +780,7 @@ function sendFakeAI() {
 </div>
                       <QuickStats accent={accent} />
                       <div className="mt-8 xl:hidden">
-  <div className="flex gap-4 pb-2">
-    {[
+  <div className="grid gap-4">  {[
       {
         title: "Sistema IA",
         desc: "Interactive intelligence core",
@@ -823,28 +822,18 @@ function sendFakeAI() {
     ))}
   </div>
 </div>
-                      <div className="mt-8">
-
-                      <div className="mt-8">
+<div className="mt-12 space-y-12">
   <LiveCore accent={accent} playTapSound={playTapSound} />
-</div>
-  <TapGame
-    accent={accent}
-    score={score}
-    bestScore={bestScore}
-    addPoint={addPoint}
-  />
+  <EmojiBalanceGame accent={accent} playTapSound={playTapSound} />
 </div>
                       <div className="mt-8">
-  <InteractiveZone
-    accent={accent}
-    mood={mood}
-    setMood={setMood}
-    visitorMessage={visitorMessage}
-    setVisitorMessage={setVisitorMessage}
-    saveVisitorMessage={saveVisitorMessage}
-    savedMessages={savedMessages}
-  />
+ <InteractiveZone
+  accent={accent}
+  visitorMessage={visitorMessage}
+  setVisitorMessage={setVisitorMessage}
+  saveVisitorMessage={saveVisitorMessage}
+  savedMessages={savedMessages}
+/>
 </div>
                       <div className="mt-8 rounded-[2rem] border border-white/10 bg-black/25 p-6">
   <p className={`text-xs uppercase tracking-[0.2em] ${accent.text}`}>
@@ -2301,43 +2290,140 @@ function TapGame({
     </Panel>
   );
 }
+function EmojiBalanceGame({ accent, playTapSound }) {
+  const emojis = ["⚽", "🚀", "⭐", "🎮", "🔥", "💎"];
+  const [emoji, setEmoji] = useState("⚽");
+  const [y, setY] = useState(130);
+  const [velocity, setVelocity] = useState(0);
+  const [running, setRunning] = useState(false);
+  const [gameOver, setGameOver] = useState(false);
+  const [points, setPoints] = useState(0);
+  const [record, setRecord] = useState(0);
+
+  useEffect(() => {
+    if (!running) return;
+
+    const loop = setInterval(() => {
+      setVelocity((v) => v + 0.55 + Math.min(points / 900, 0.8));
+
+      setY((currentY) => {
+        const nextY = currentY + velocity;
+
+        if (nextY < 0 || nextY > 250) {
+          setRunning(false);
+          setGameOver(true);
+          setRecord((old) => Math.max(old, points));
+          return currentY;
+        }
+
+        return nextY;
+      });
+
+      setPoints((p) => p + 1);
+    }, 28);
+
+    return () => clearInterval(loop);
+  }, [running, velocity, points]);
+
+  function tapGame() {
+    playTapSound();
+
+    if (!running) {
+      setY(130);
+      setVelocity(-8);
+      setPoints(0);
+      setGameOver(false);
+      setRunning(true);
+      return;
+    }
+
+    setVelocity(-8);
+  }
+
+  return (
+    <Panel>
+      <div className="flex items-center justify-between gap-4">
+        <div>
+          <p className={`text-xs uppercase tracking-[0.2em] ${accent.text}`}>
+            Mini juego
+          </p>
+
+          <h3 className={`${sora.className} mt-3 text-2xl font-bold text-white`}>
+            No dejes caer el objeto
+          </h3>
+        </div>
+
+        <div className="text-right">
+          <p className="text-xs text-zinc-500">Score</p>
+          <p className={`${sora.className} text-2xl font-bold ${accent.text}`}>
+            {points}
+          </p>
+        </div>
+      </div>
+
+      <div className="mt-5 flex flex-wrap gap-2">
+        {emojis.map((item) => (
+          <button
+            key={item}
+            onClick={() => setEmoji(item)}
+            className={`rounded-2xl border px-4 py-3 text-2xl ${
+              emoji === item
+                ? `${accent.bg} border-white/20`
+                : "border-white/10 bg-white/[0.04]"
+            }`}
+          >
+            {item}
+          </button>
+        ))}
+      </div>
+
+      <button
+        onClick={tapGame}
+        className="relative mt-6 h-80 w-full overflow-hidden rounded-[2rem] border border-white/10 bg-black/35"
+      >
+        <motion.div
+          animate={{ top: y }}
+          transition={{ duration: 0.05 }}
+          className="absolute left-1/2 -translate-x-1/2 text-6xl"
+        >
+          {emoji}
+        </motion.div>
+
+        {!running && (
+          <div className="absolute inset-0 flex items-center justify-center bg-black/30 text-center backdrop-blur-sm">
+            <p className="px-6 text-sm leading-7 text-zinc-300">
+              Toca para iniciar. Luego toca para que no caiga.
+            </p>
+          </div>
+        )}
+
+        {gameOver && (
+          <div className="absolute inset-0 flex items-center justify-center bg-black/50 text-center backdrop-blur-sm">
+            <p className={`${sora.className} text-2xl font-bold text-white`}>
+              Game Over
+            </p>
+          </div>
+        )}
+      </button>
+
+      <div className="mt-5 flex items-center justify-between rounded-2xl border border-white/10 bg-white/[0.04] px-5 py-4">
+        <span className="text-sm text-zinc-400">Mejor récord</span>
+        <span className={`${sora.className} font-bold ${accent.text}`}>
+          {record}
+        </span>
+      </div>
+    </Panel>
+  );
+}
 function InteractiveZone({
   accent,
-  mood,
-  setMood,
   visitorMessage,
   setVisitorMessage,
   saveVisitorMessage,
   savedMessages,
 }) {
   return (
-    <div className="grid gap-5 md:grid-cols-2">
-      <Panel>
-        <p className={`text-xs uppercase tracking-[0.2em] ${accent.text}`}>
-          Mood Game
-        </p>
-
-        <h3 className={`${sora.className} mt-4 text-2xl font-bold text-white`}>
-          Elige la energía
-        </h3>
-
-        <div className="mt-6 grid grid-cols-2 gap-3">
-          {["azul", "morado", "verde", "rojo"].map((item) => (
-            <button
-              key={item}
-              onClick={() => setMood(item)}
-              className={`rounded-2xl border px-4 py-4 text-sm font-bold capitalize transition ${
-                mood === item
-                  ? `${accent.bg} border-white/20 text-white`
-                  : "border-white/10 bg-white/[0.04] text-zinc-400"
-              }`}
-            >
-              {item}
-            </button>
-          ))}
-        </div>
-      </Panel>
-
+    <div className="grid gap-5">
       <Panel>
         <p className={`text-xs uppercase tracking-[0.2em] ${accent.text}`}>
           Visitor Message
@@ -2350,7 +2436,7 @@ function InteractiveZone({
         <textarea
           value={visitorMessage}
           onChange={(e) => setVisitorMessage(e.target.value)}
-          placeholder="Escribe algo..."
+          placeholder="Escribe algo."
           className="mt-5 min-h-28 w-full resize-none rounded-2xl border border-white/10 bg-black/40 p-4 text-sm text-white outline-none"
         />
 
