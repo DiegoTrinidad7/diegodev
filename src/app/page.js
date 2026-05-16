@@ -314,6 +314,7 @@ const [nowPlaying] = useState({
   { id: "identidad", label: t.nav.identidad, icon: "ID" },
   { id: "proyectos", label: t.nav.proyectos, icon: "▣" },
   { id: "ia", label: t.nav.ia, icon: "AI" },
+  { id: "timeline", label: t.nav.timeline, icon: "↗" },
   { id: "terminal", label: t.nav.terminal, icon: ">" },
   { id: "contacto", label: t.nav.contacto, icon: "@" },
 ];
@@ -554,6 +555,9 @@ function sendFakeAI() {
                       <QuickStats accent={accent} />
                       <div className="mt-10">
   <AnonymousMessage accent={accent} />
+  <div className="mt-10">
+  <DigitalOrigin accent={accent} />
+</div>
 </div>
                       
                     
@@ -1511,7 +1515,26 @@ function FloatingIdeas({ accent }) {
   );
 }
 
-
+const projects = [
+  {
+    tag: "Principal",
+    title: "Diego.dev",
+    text: "Mi app web personal con identidad, proyectos, contacto, IA, terminal y mensaje anónimo.",
+    status: "Activo",
+  },
+  {
+    tag: "Interactivo",
+    title: "Mensaje anónimo",
+    text: "Un módulo para dejar mensajes dentro del sistema digital de forma simple y elegante.",
+    status: "Nuevo",
+  },
+  {
+    tag: "Próxima fase",
+    title: "Asistente IA",
+    text: "Un asistente que responderá preguntas sobre mí, mis proyectos y tecnologías.",
+    status: "Planeado",
+  },
+];
 const currentlyBuilding = [
   {
     title: "Diego.dev V1",
@@ -1965,6 +1988,42 @@ function AnonymousMessage({ accent }) {
           Mensaje guardado dentro del núcleo.
         </p>
       )}
+    </div>
+  );
+}
+function DigitalOrigin({ accent }) {
+  return (
+    <div className="overflow-hidden rounded-[2rem] border border-white/10 bg-black/30 p-6 backdrop-blur-xl">
+      <p className={`text-[11px] uppercase tracking-[0.25em] ${accent.text}`}>
+        ORIGEN DIGITAL
+      </p>
+
+      <h2 className={`${sora.className} mt-3 text-[2rem] font-bold text-white`}>
+        Toda identidad comienza en algún lugar.
+      </h2>
+
+      <p className="mt-3 max-w-[520px] text-sm leading-7 text-zinc-400">
+        Desde México, construyendo experiencias digitales, proyectos e ideas que crecen con el tiempo.
+      </p>
+
+      <div className="mt-6 overflow-hidden rounded-[1.7rem] border border-white/10 bg-black/40">
+        <iframe
+          title="Origen Digital"
+          src="https://www.google.com/maps?q=Mexico&output=embed"
+          className="h-[330px] w-full grayscale invert contrast-125"
+          loading="lazy"
+        />
+      </div>
+
+      <div className="mt-5 flex flex-wrap gap-3">
+        <span className="rounded-full border border-white/10 bg-white/[0.04] px-4 py-2 text-xs text-zinc-400">
+          Señal activa
+        </span>
+
+        <span className={`rounded-full border px-4 py-2 text-xs ${accent.soft} ${accent.text}`}>
+          México
+        </span>
+      </div>
     </div>
   );
 }
